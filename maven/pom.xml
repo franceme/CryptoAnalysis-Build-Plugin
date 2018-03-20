@@ -10,7 +10,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>maven</artifactId>
+    <artifactId>crypto-analysis-maven</artifactId>
     <version>1.0-SNAPSHOT</version>
     
 </project>
