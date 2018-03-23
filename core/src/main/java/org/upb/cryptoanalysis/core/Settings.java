@@ -22,14 +22,38 @@ public class Settings {
      */
     private String githubUrl;
 
+    /**
+     * Should issues be posted to Github. If yes, {@link #githubUrl} should be set, otherwise nothing will happen.
+     */
     private boolean postIssuesToGithub;
+
+    /**
+     * The local directory to which issues will be output.
+     */
+    private String issueOutputDirectory;
 
     public void setGithubUrl(String url){
         //TODO make regex pattern to check url
-        githubUrl = url;
+        this.githubUrl = url;
+    }
+
+    public String getGithubUrl() {
+        return githubUrl;
     }
 
     public void setPostIssuesToGithub(boolean shouldPost){
-        postIssuesToGithub = shouldPost;
+        this.postIssuesToGithub = shouldPost;
+    }
+
+    public boolean postIssuesToGithub() {
+        return postIssuesToGithub;
+    }
+
+    public void setIssueOutputDirectory(String outputDirectory){
+        this.issueOutputDirectory = outputDirectory;
+    }
+
+    public String getIssueOutputDirectory() {
+        return issueOutputDirectory;
     }
 }
