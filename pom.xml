@@ -7,6 +7,7 @@
     <groupId>org.upb.cryptoanalysis</groupId>
     <artifactId>CryptoAnalysis-Build-Plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <modules>
         <module>core</module>
