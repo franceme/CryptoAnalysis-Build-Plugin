@@ -3,7 +3,7 @@ package org.upb.cryptoanalysis.core;
 import crypto.HeadlessCryptoScanner;
 import crypto.HeadlessCryptoScanner.CG;
 
-import java.io.File;
+import java.util.logging.Logger;
 
 /**
  * Core analysis class that starts the crypto analysis independent of the build tool or cli.
@@ -14,71 +14,52 @@ public class Analysis {
     /* The settings for the analysis */
     private Settings settings;
 
+    private final static Logger LOGGER = Logger.getLogger(Analysis.class.getName());
 
-    private String rulesDirectory;
-    private String callGraph;
-    private String reportsFolderParameter;
-    private File reportsFolder;
-
-    private File targetDir;
-    private String classPath;
-    private String artifactIdentifier;
-    //TODO output directory
 
     public Analysis(Settings settings){
-        final File classFolder = new File(targetDir.getAbsolutePath() + File.separator + "classes");
+        this.settings = settings;
+        createReportFolder();
+    }
+
+    public void start(){
 
         //TODO should we be using the headless version?
         //TODO one scanner per jar?
 
-        final String outputFile = settings.getIssueOutputDirectory() + File.separator + artifactIdentifier + ".txt";
-
         HeadlessCryptoScanner sourceCryptoScanner = new HeadlessCryptoScanner() {
 
             @Override
-            protected String sootClassPath() {
-                if (classPath == null) {
-                    System.out.println("Potentially missing some dependencies");
-                    return applicationClassPath();
-                }
-                return classPath;
-            }
+            protected String sootClassPath() { return applicationClassPath(); }
 
             @Override
             protected String applicationClassPath() {
-                return classFolder.getAbsolutePath();
+                return settings.getApplicationClassPath().getAbsolutePath();
             }
 
             @Override
-            protected String softwareIdentifier() {
-                return artifactIdentifier;
-            }
+            protected String softwareIdentifier() { return settings.getSoftwareIdentifier(); }
+
+            //TODO modify Scanner to provide json output options
+            @Override
+            protected String getOutputFile() { return null; }
 
             @Override
-            protected CG callGraphAlogrithm() {
-                return getCgFromString();
-            }
+            protected CG callGraphAlogrithm() { return getCgFromString(settings.getCallGraph()); }
+
+            @Override
+            protected String getCSVOutputFile() { return null; }
 
             @Override
             protected String getRulesDirectory() {
-                return rulesDirectory;
-            }
-
-            @Override
-            protected String getCSVOutputFile() {
-                return null;
-            }
-
-            @Override
-            protected String getOutputFile() {
-                return outputFile;
+                return settings.getRulesDirectory().getAbsolutePath();
             }
         };
         sourceCryptoScanner.exec();
     }
 
     //TODO scratch this?
-    private CG getCgFromString(){
+    private CG getCgFromString(String callGraph){
         if (callGraph.equalsIgnoreCase("cha")) {
             return CG.CHA;
         } else if (callGraph.equalsIgnoreCase("spark")) {
@@ -91,5 +72,12 @@ public class Analysis {
         return CG.CHA;
     }
 
-
+    private void createReportFolder() {
+        if (!settings.getIssueOutputDirectory().exists()) {
+            boolean couldCreateReportDir = settings.getIssueOutputDirectory().mkdirs();
+            if (!couldCreateReportDir){
+                LOGGER.warning("Could not create directory to output issue.");
+            }
+        }
+    }
 }

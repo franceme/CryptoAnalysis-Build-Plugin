@@ -35,6 +35,27 @@ public class Settings {
      */
     private File issueOutputDirectory;
 
+    /**
+     * The call graph algorithm to use
+     */
+    private String callGraph;
+
+    /**
+     * Directory in which the compiled classes for the application are
+     */
+    private File applicationClassPath;
+
+    /**
+     * Directory in which CrySL rules are located
+     */
+    private File rulesDirectory;
+
+    /**
+     * String which can be used to identify the analyzed software
+     */
+    private String softwareIdentifier;
+
+
     public boolean setGithubUrl(URL url){
         //TODO make regex pattern to check url
         this.githubUrl = url;
@@ -61,5 +82,37 @@ public class Settings {
 
     public File getIssueOutputDirectory() {
         return issueOutputDirectory;
+    }
+
+    public String getCallGraph() {
+        return callGraph;
+    }
+
+    public void setCallGraph(String callGraph) {
+        this.callGraph = callGraph;
+    }
+
+    public File getApplicationClassPath() {
+        return applicationClassPath;
+    }
+
+    public void setApplicationClassPath(File applicationClassPath) {
+        this.applicationClassPath = applicationClassPath;
+    }
+
+    public File getRulesDirectory() {
+        return rulesDirectory;
+    }
+
+    public void setRulesDirectory(File rulesDirectory) {
+        this.rulesDirectory = rulesDirectory;
+    }
+
+    public String getSoftwareIdentifier() {
+        return softwareIdentifier;
+    }
+
+    public void setSoftwareIdentifier(String softwareIdentifier) {
+        this.softwareIdentifier = softwareIdentifier;
     }
 }

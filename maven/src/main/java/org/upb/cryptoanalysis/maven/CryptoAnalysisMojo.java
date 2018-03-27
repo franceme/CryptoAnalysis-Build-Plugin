@@ -1,6 +1,7 @@
 package org.upb.cryptoanalysis.maven;
 
-import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Build;
+import org.apache.maven.model.Model;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -8,6 +9,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+import org.upb.cryptoanalysis.core.Analysis;
 import org.upb.cryptoanalysis.core.Settings;
 
 import java.io.File;
@@ -26,11 +28,8 @@ public class CryptoAnalysisMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
-    @Parameter(defaultValue = "${session}", readonly = true)
-    private MavenSession session;
-
     @Parameter(property = "check.rulesDirectory")
-    private String rulesDirectory;
+    private File rulesDirectory;
 
     @Parameter(property = "check.callGraph", defaultValue = "CHA")
     private String callGraph;
@@ -49,6 +48,14 @@ public class CryptoAnalysisMojo extends AbstractMojo {
     public void execute() throws  MojoExecutionException{
         log.info("CryptoAnalysis plugin started");
         Settings settings = new Settings();
+        settings = fillSettings(settings);
+
+
+        Analysis analysis = new Analysis(settings);
+        analysis.start();
+    }
+
+    private Settings fillSettings(Settings settings) throws MojoExecutionException {
         if (postIssuesToGithub){
             settings.setPostIssuesToGithub(postIssuesToGithub);
             if (!settings.setGithubUrl(githubRepoUrl)){
@@ -58,9 +65,17 @@ public class CryptoAnalysisMojo extends AbstractMojo {
         if (settings.setIssueOutputDirectory(reportsFolder)){
             throw new MojoExecutionException("The plugin cannot write into the report folder.");
         }
+        settings.setCallGraph(callGraph);
+        settings.setApplicationClassPath(getClassFolderFromModel());
+        settings.setRulesDirectory(rulesDirectory);
+        return settings;
+    }
 
-
-        //TODO Pass information to analysis
+    private File getClassFolderFromModel(){
+        Model model = project.getModel();
+        Build build = model.getBuild();
+        File targetDir = new File(build.getDirectory());
+        return new File(targetDir.getAbsolutePath() + File.separator + "classes");
     }
 }
 
