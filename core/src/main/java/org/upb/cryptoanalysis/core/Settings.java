@@ -3,6 +3,9 @@ package org.upb.cryptoanalysis.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.net.URL;
+
 /**
  * Class to store settings for the analysis, e.g.,
  * whether to post the issues to Github or to which URL.
@@ -20,7 +23,7 @@ public class Settings {
     /**
      * Used to get existent issues and to post new issues.
      */
-    private String githubUrl;
+    private URL githubUrl;
 
     /**
      * Should issues be posted to Github. If yes, {@link #githubUrl} should be set, otherwise nothing will happen.
@@ -30,14 +33,15 @@ public class Settings {
     /**
      * The local directory to which issues will be output.
      */
-    private String issueOutputDirectory;
+    private File issueOutputDirectory;
 
-    public void setGithubUrl(String url){
+    public boolean setGithubUrl(URL url){
         //TODO make regex pattern to check url
         this.githubUrl = url;
+        return true;
     }
 
-    public String getGithubUrl() {
+    public URL getGithubUrl() {
         return githubUrl;
     }
 
@@ -49,11 +53,13 @@ public class Settings {
         return postIssuesToGithub;
     }
 
-    public void setIssueOutputDirectory(String outputDirectory){
+    public boolean setIssueOutputDirectory(File outputDirectory){
+        //TODO check if this is a writeable directory
         this.issueOutputDirectory = outputDirectory;
+        return true;
     }
 
-    public String getIssueOutputDirectory() {
+    public File getIssueOutputDirectory() {
         return issueOutputDirectory;
     }
 }
