@@ -7,6 +7,8 @@ import java.io.File;
 
 /**
  * Core analysis class that starts the crypto analysis independent of the build tool or cli.
+ *
+ * TODO rulesDir: Do we download standard rules somewhere (or include them) and allow configuring own rules in some directory?
  */
 public class Analysis {
     /* The settings for the analysis */
