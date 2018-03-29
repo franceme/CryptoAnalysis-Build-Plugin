@@ -19,7 +19,7 @@ import java.net.URL;
  * Runs the CogniCrypt static analysis to
  * check used security for potential security problems.
  *
- * @goal cyptoanalysis
+ * @goal cryptoanalysis
  * @phase verify
  */
 @Mojo( name = "cryptoanalysis")
