@@ -74,10 +74,8 @@ public class Settings {
         return postIssuesToGithub;
     }
 
-    public boolean setIssueOutputDirectory(File outputDirectory){
-        //TODO check if this is a writeable directory
+    public void setIssueOutputDirectory(File outputDirectory){
         this.issueOutputDirectory = outputDirectory;
-        return true;
     }
 
     public File getIssueOutputDirectory() {

@@ -62,9 +62,7 @@ public class CryptoAnalysisMojo extends AbstractMojo {
                 throw new MojoExecutionException("Analysis should post issues to github, but github url is invalid.");
             }
         }
-        if (settings.setIssueOutputDirectory(reportsFolder)){
-            throw new MojoExecutionException("The plugin cannot write into the report folder.");
-        }
+        settings.setIssueOutputDirectory(reportsFolder);
         settings.setCallGraph(callGraph);
         settings.setApplicationClassPath(getClassFolderFromModel());
         settings.setRulesDirectory(rulesDirectory);
