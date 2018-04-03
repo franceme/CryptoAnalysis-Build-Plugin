@@ -53,7 +53,7 @@ public class CryptoAnalysisMojo extends AbstractMojo {
             settings = fillSettings(settings);
         }
         catch (MojoExecutionException m){
-            throw new MojoExecutionException("Error filling settings:" + m.getMessage());
+            throw new MojoExecutionException("Error filling settings: " + m.getMessage());
         }
         log.debug("Settings successfully filled.");
 
@@ -63,7 +63,7 @@ public class CryptoAnalysisMojo extends AbstractMojo {
             log.debug("Analysis initialized");
             analysis.start();
         } catch (Exception e){
-            log.debug("Exception occurred in analysis:" + e.getMessage());
+            log.debug("Exception occurred in analysis: " + e.getMessage());
         }
     }
 
