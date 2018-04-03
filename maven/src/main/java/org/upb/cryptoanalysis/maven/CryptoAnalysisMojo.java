@@ -5,6 +5,7 @@ import org.apache.maven.model.Model;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -18,10 +19,11 @@ import java.net.URL;
 /**
  * Runs the CogniCrypt static analysis to
  * check used security for potential security problems.
- *
- * @phase verify
  */
-@Mojo( name = "cryptoanalysis")
+@Mojo(
+        name = "check",
+        defaultPhase = LifecyclePhase.VERIFY
+)
 public class CryptoAnalysisMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project}", readonly = true)
@@ -47,8 +49,13 @@ public class CryptoAnalysisMojo extends AbstractMojo {
     public void execute() throws  MojoExecutionException{
         log.info("CryptoAnalysis plugin started");
         Settings settings = new Settings();
-        settings = fillSettings(settings);
-
+        try{
+            settings = fillSettings(settings);
+        }
+        catch (MojoExecutionException m){
+            throw new MojoExecutionException("Error filling settings:" + m.getMessage());
+        }
+        log.info("Settings successfully filled.");
 
         Analysis analysis = new Analysis(settings);
         analysis.start();
