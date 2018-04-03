@@ -7,8 +7,6 @@ import java.util.logging.Logger;
 
 /**
  * Core analysis class that starts the crypto analysis independent of the build tool or cli.
- *
- * TODO rulesDir: Do we download standard rules somewhere (or include them) and allow configuring own rules in some directory?
  */
 public class Analysis {
     /* The settings for the analysis */
@@ -24,8 +22,8 @@ public class Analysis {
 
     public void start(){
 
-        //TODO should we be using the headless version?
         //TODO one scanner per jar?
+        LOGGER.info("Starting analysis.");
 
         HeadlessCryptoScanner sourceCryptoScanner = new HeadlessCryptoScanner() {
 
@@ -50,12 +48,20 @@ public class Analysis {
             @Override
             protected String getCSVOutputFile() { return null; }
 
+            //TODO rulesDir: Include default rules in jar and allow configuring own rules in rulesDir parameter
             @Override
             protected String getRulesDirectory() {
                 return settings.getRulesDirectory().getAbsolutePath();
             }
         };
-        sourceCryptoScanner.exec();
+        LOGGER.info("Initialized scanner");
+        try{
+            sourceCryptoScanner.exec();
+        }
+        catch (Exception e){
+            LOGGER.info("Exception occurred while executing scanner: "+e.getMessage());
+        }
+
     }
 
     //TODO scratch this?
@@ -75,7 +81,7 @@ public class Analysis {
     private void createReportFolder() {
         if (!settings.getIssueOutputDirectory().exists()) {
             boolean couldCreateReportDir = settings.getIssueOutputDirectory().mkdirs();
-            if (!couldCreateReportDir){
+            if (!couldCreateReportDir) {
                 LOGGER.warning("Could not create directory to output issue.");
             }
         }
