@@ -78,6 +78,7 @@ public class CryptoAnalysisMojo extends AbstractMojo {
         settings.setCallGraph(callGraph);
         settings.setApplicationClassPath(getClassFolderFromModel());
         settings.setRulesDirectory(rulesDirectory);
+        settings.setSoftwareIdentifier(project.getArtifactId());
         return settings;
     }
 
