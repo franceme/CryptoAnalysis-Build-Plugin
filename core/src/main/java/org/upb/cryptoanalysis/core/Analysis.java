@@ -12,7 +12,7 @@ public class Analysis {
     /* The settings for the analysis */
     private Settings settings;
 
-    private final static Logger LOGGER = Logger.getLogger(Analysis.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(Analysis.class.getName());
 
 
     public Analysis(Settings settings){
@@ -38,7 +38,6 @@ public class Analysis {
             @Override
             protected String softwareIdentifier() { return settings.getSoftwareIdentifier(); }
 
-            //TODO modify Scanner to provide json output options
             @Override
             protected String getOutputFile() { return null; }
 
@@ -48,10 +47,21 @@ public class Analysis {
             @Override
             protected String getCSVOutputFile() { return null; }
 
-            //TODO rulesDir: Include default rules in jar and allow configuring own rules in rulesDir parameter
+            //TODO test json output dir
+            @Override
+            protected String getJSONOutputDir() {
+                return settings.getIssueOutputDirectory().getAbsolutePath();
+            }
+
+            //TODO check if custom directory works
+            //TODO check if defaultRules from Jar work
             @Override
             protected String getRulesDirectory() {
-                return settings.getRulesDirectory().getAbsolutePath();
+                if (settings.getRulesDirectory() != null && settings.getRulesDirectory().exists()){
+                    return settings.getRulesDirectory().getAbsolutePath();
+                } else {
+                    return this.getClass().getResource("defaultRules").getFile();
+                }
             }
         };
         LOGGER.info("Initialized scanner");
