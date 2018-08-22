@@ -14,7 +14,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
-    <name>CogniCrypt CryptoAnalysis Maven Plugin</name>
+    <name>CogniCrypt Maven Plugin</name>
     <description>The CryptoAnalysis Maven Plugin uses the CogniCrypt static analysis to check the correct use
     of cryptography APIs.
     </description>
