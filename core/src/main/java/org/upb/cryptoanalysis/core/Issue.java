@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Class for a single issue, includes converting the issue to json
+ *
+ * Github API specification what issues should look like: https://developer.github.com/v3/issues/#create-an-issue
  * //TODO figure out where to check for existing github ids
  *
  */
@@ -14,7 +16,6 @@ public class Issue {
 
     private static ObjectMapper mapper = new ObjectMapper();
 
-    private int id;
     private String title;
     /**
      * Explanation of the problem. Should include the line, so that
