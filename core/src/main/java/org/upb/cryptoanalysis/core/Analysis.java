@@ -38,8 +38,9 @@ public class Analysis {
             @Override
             protected String softwareIdentifier() { return settings.getSoftwareIdentifier(); }
 
+            //TODO test json output dir
             @Override
-            protected String getOutputFile() { return null; }
+            protected String getOutputFolder(){ return settings.getIssueOutputDirectory().getAbsolutePath(); };
 
             @Override
             protected CG callGraphAlogrithm() { return getCgFromString(settings.getCallGraph()); }
@@ -47,11 +48,6 @@ public class Analysis {
             @Override
             protected String getCSVOutputFile() { return null; }
 
-            //TODO test json output dir
-            @Override
-            protected String getJSONOutputDir() {
-                return settings.getIssueOutputDirectory().getAbsolutePath();
-            }
 
             //TODO check if custom directory works
             //TODO check if defaultRules from Jar work
@@ -71,7 +67,6 @@ public class Analysis {
         catch (Exception e){
             LOGGER.info("Exception occurred while executing scanner: "+e.getMessage());
         }
-
     }
 
     //TODO scratch this?
