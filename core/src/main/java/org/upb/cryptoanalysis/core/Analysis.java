@@ -3,6 +3,8 @@ package org.upb.cryptoanalysis.core;
 import crypto.HeadlessCryptoScanner;
 import crypto.HeadlessCryptoScanner.CG;
 
+import java.io.File;
+import java.net.URL;
 import java.util.logging.Logger;
 
 /**
@@ -50,13 +52,20 @@ public class Analysis {
 
 
             //TODO check if custom directory works
-            //TODO check if defaultRules from Jar work
             @Override
             protected String getRulesDirectory() {
-                if (settings.getRulesDirectory() != null && settings.getRulesDirectory().exists()){
-                    return settings.getRulesDirectory().getAbsolutePath();
+                System.out.println("Searching rules directory");
+                File rulesDir = settings.getRulesDirectory();
+                System.out.println("Is the rules directory specified in the setting? " +
+                        ((rulesDir == null) ? "no" : "yes"));
+                if (rulesDir != null && rulesDir.exists()){
+                    System.out.println("Found custom directory with rules: " + rulesDir.getAbsolutePath());
+                    return rulesDir.getAbsolutePath();
                 } else {
-                    return this.getClass().getResource("defaultRules").getFile();
+                    System.out.println("Using default rules.");
+                    URL defaultRules = this.getClass().getClassLoader().getResource("rules");
+                    String rules = defaultRules.getFile();
+                    return rules;
                 }
             }
         };
@@ -65,7 +74,7 @@ public class Analysis {
             sourceCryptoScanner.exec();
         }
         catch (Exception e){
-            LOGGER.info("Exception occurred while executing scanner: "+e.getMessage());
+            LOGGER.info("Exception occurred while executing scanner: "+ e);
         }
     }
 
