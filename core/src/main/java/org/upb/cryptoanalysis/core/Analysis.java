@@ -50,8 +50,6 @@ public class Analysis {
             @Override
             protected String getCSVOutputFile() { return null; }
 
-
-            //TODO check if custom directory works
             @Override
             protected String getRulesDirectory() {
                 System.out.println("Searching rules directory");
