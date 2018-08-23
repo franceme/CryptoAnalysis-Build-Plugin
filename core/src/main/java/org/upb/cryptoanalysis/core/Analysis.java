@@ -34,7 +34,7 @@ public class Analysis {
 
             @Override
             protected String applicationClassPath() {
-                return settings.getApplicationClassPath().getAbsolutePath();
+                return settings.getApplicationClassPath();
             }
 
             @Override

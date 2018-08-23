@@ -1,7 +1,6 @@
 package org.upb.cryptoanalysis.maven;
 
-import org.apache.maven.model.Build;
-import org.apache.maven.model.Model;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -50,7 +49,7 @@ public class CryptoAnalysisMojo extends AbstractMojo {
         log.info("CryptoAnalysis plugin started");
         Settings settings = new Settings();
         try{
-            settings = fillSettings(settings);
+            fillSettings(settings);
         }
         catch (MojoExecutionException m){
             throw new MojoExecutionException("Error filling settings: " + m.getMessage());
@@ -67,7 +66,7 @@ public class CryptoAnalysisMojo extends AbstractMojo {
         }
     }
 
-    private Settings fillSettings(Settings settings) throws MojoExecutionException {
+    private void fillSettings(Settings settings) throws MojoExecutionException {
         if (postIssuesToGithub){
             settings.setPostIssuesToGithub(postIssuesToGithub);
             if (!settings.setGithubUrl(githubRepoUrl)){
@@ -79,14 +78,15 @@ public class CryptoAnalysisMojo extends AbstractMojo {
         settings.setApplicationClassPath(getClassFolderFromModel());
         settings.setRulesDirectory(rulesDirectory);
         settings.setSoftwareIdentifier(project.getArtifactId());
-        return settings;
     }
 
-    private File getClassFolderFromModel(){
-        Model model = project.getModel();
-        Build build = model.getBuild();
-        File targetDir = new File(build.getDirectory());
-        return new File(targetDir.getAbsolutePath() + File.separator + "classes");
+    private String getClassFolderFromModel() throws MojoExecutionException {
+        try {
+            return String.join(File.pathSeparator, project.getRuntimeClasspathElements());
+        } catch (DependencyResolutionRequiredException e) {
+            throw new MojoExecutionException("Maven project could not fully resolve dependencies. ", e);
+        }
+
     }
 }
 

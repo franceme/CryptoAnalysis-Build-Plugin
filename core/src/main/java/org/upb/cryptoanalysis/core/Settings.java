@@ -41,9 +41,9 @@ public class Settings {
     private String callGraph;
 
     /**
-     * Directory in which the compiled classes for the application are
+     * List of runtime classpath elements
      */
-    private File applicationClassPath;
+    private String applicationClassPath;
 
     /**
      * Directory in which CrySL rules are located
@@ -90,11 +90,11 @@ public class Settings {
         this.callGraph = callGraph;
     }
 
-    public File getApplicationClassPath() {
+    public String getApplicationClassPath() {
         return applicationClassPath;
     }
 
-    public void setApplicationClassPath(File applicationClassPath) {
+    public void setApplicationClassPath(String applicationClassPath) {
         this.applicationClassPath = applicationClassPath;
     }
 
