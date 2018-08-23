@@ -76,7 +76,6 @@ public class Analysis {
         }
     }
 
-    //TODO scratch this?
     private CG getCgFromString(String callGraph){
         if (callGraph.equalsIgnoreCase("cha")) {
             return CG.CHA;
