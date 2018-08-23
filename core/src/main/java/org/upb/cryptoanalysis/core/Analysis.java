@@ -28,6 +28,7 @@ public class Analysis {
         LOGGER.info("Starting analysis.");
 
         HeadlessCryptoScanner sourceCryptoScanner = new HeadlessCryptoScanner() {
+            String rulesDir;
 
             @Override
             protected String sootClassPath() { return applicationClassPath(); }
@@ -52,19 +53,24 @@ public class Analysis {
 
             @Override
             protected String getRulesDirectory() {
-                System.out.println("Searching rules directory");
-                File rulesDir = settings.getRulesDirectory();
-                System.out.println("Is the rules directory specified in the setting? " +
-                        ((rulesDir == null) ? "no" : "yes"));
-                if (rulesDir != null && rulesDir.exists()){
-                    System.out.println("Found custom directory with rules: " + rulesDir.getAbsolutePath());
-                    return rulesDir.getAbsolutePath();
-                } else {
-                    System.out.println("Using default rules.");
-                    URL defaultRules = this.getClass().getClassLoader().getResource("rules");
-                    String rules = defaultRules.getFile();
-                    return rules;
+                if (rulesDir == null){
+                    System.out.println("Searching rules directory");
+                    File settingsRulesDirectory = settings.getRulesDirectory();
+                    System.out.println("Is the rules directory specified in the setting? " +
+                            ((settingsRulesDirectory == null) ? "no" : "yes"));
+                    if (settingsRulesDirectory != null && settingsRulesDirectory.exists()){
+                        System.out.println("Found custom directory with rules: " + settingsRulesDirectory.getAbsolutePath());
+                        rulesDir =  settingsRulesDirectory.getAbsolutePath();
+                    } else {
+                        System.out.println("Using default rules.");
+                        URL defaultRules = this.getClass().getClassLoader().getResource("rules");
+                        if (defaultRules == null || defaultRules.getFile() == null){
+                            System.out.println("Default rules not included in jar.");
+                        }
+                        rulesDir = defaultRules.getFile();
+                    }
                 }
+                return rulesDir;
             }
         };
         LOGGER.info("Initialized scanner");
